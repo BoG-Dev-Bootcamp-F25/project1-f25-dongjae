@@ -1,0 +1,19 @@
+/* LinesPage.css */
+.container {
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.line-buttons {
+  margin-bottom: 1rem;
+}
+
+.line-button {
+  margin-right: 0.5rem;
+  font-weight: normal;
+}
+
+.line-button.active {
+  font-weight: bold;
+}
