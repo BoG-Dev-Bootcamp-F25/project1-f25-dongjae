@@ -1,0 +1,17 @@
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.station-btn {
+  margin: 4px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.station-btn.active {
+  background-color: #007bff;
+  color: white;
+}

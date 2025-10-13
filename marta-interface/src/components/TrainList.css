@@ -1,0 +1,12 @@
+.filter-buttons button {
+  margin: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #eee;
+}
+
+.filter-buttons button.active {
+  background-color: #ccc;
+  font-weight: bold;
+}

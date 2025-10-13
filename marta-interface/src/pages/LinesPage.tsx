@@ -1,24 +1,40 @@
 import { useState, useEffect } from "react";
 import {TrainList} from "../components/TrainList";
+import { NavBar } from "../components/NavBar";
 
 export default function LinesPage() {
   // Track current line
   const [currLine, setCurrLine] = useState("gold"); // default line
   const [trainData, setTrainData] = useState<any[]>([]);
+  const [stationData, setStationData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const [selectedStation, setSelectedStation] = useState<string | null>(null);
+  const [filters, setFilters] = useState({
+    arriving: false,
+    scheduled: false,
+    direction: null as "N" | "S" | "E" | "W" | null,
+  });
+
+
   useEffect(() => {
-    setLoading(true); // start loading
-    fetch(`https://midsem-bootcamp-api.onrender.com/arrivals/${currLine}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setTrainData(data); // update state with fetched trains
-        setLoading(false); // stop loading
+    setLoading(true);
+
+    Promise.all([
+      fetch(`https://midsem-bootcamp-api.onrender.com/arrivals/${currLine}`).then((res) => res.json()),
+      fetch(`https://midsem-bootcamp-api.onrender.com/stations/${currLine}`).then((res) => res.json()),
+    ])
+      .then(([trains, stations]) => {
+        setTrainData(trains);
+        setStationData(stations);
+        setLoading(false);
       })
       .catch((err) => {
         console.error("Fetch error:", err);
         setLoading(false);
       });
   }, [currLine]);
+
 
   return (
     <div className="container">
@@ -27,25 +43,39 @@ export default function LinesPage() {
     {/* Line Buttons */}
     <div className="line-buttons">
         {["gold", "red", "green", "blue"].map((line) => (
-        <button
+          <button
             key={line}
-            onClick={() => setCurrLine(line)}
+            onClick={() => {
+              setCurrLine(line);
+              setSelectedStation(null);
+              setFilters({ arriving: false, scheduled: false, direction: null });
+            }}
             className={`line-button ${currLine === line ? "active" : ""}`}
-        >
+          >
             {line.charAt(0).toUpperCase() + line.slice(1)}
-        </button>
+          </button>
         ))}
-    </div>
+      </div>
 
 
     {loading ? (
         <p>Loading trains...</p>
-    ) : (
+      ) : (
         <>
-            <p>{trainData.length} trains loaded for {currLine} line</p>
-            <TrainList color={currLine} data={trainData} />
+          <NavBar
+            stations={stationData}
+            selectedStation={selectedStation}
+            setSelectedStation={setSelectedStation}
+          />
+          <TrainList
+            color={currLine}
+            data={trainData}
+            selectedStation={selectedStation}
+            filters={filters}
+            setFilters={setFilters}
+          />
         </>
-    )}
+      )}
     </div>
     
 
