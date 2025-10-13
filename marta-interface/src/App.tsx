@@ -1,12 +1,6 @@
+import { Link } from "react-router";
+import Home from "./pages/Home";
 
-import LinesPage from "./pages/LinesPage";
-
-function App() {
-  return (
-    <div>
-      <LinesPage />
-    </div>
-  );
+export default function App() {
+  return <Home />;
 }
-
-export default App;

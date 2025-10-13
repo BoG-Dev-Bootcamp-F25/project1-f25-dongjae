@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useParams, useSearchParams, Link } from "react-router";
 import {TrainList} from "../components/TrainList";
 import { NavBar } from "../components/NavBar";
 
@@ -38,22 +39,26 @@ export default function LinesPage() {
 
   return (
     <div className="container">
-    <h1>MARTA Train Tracker</h1>
+      <h1>
+        <Link to="/" className="home-btn">MARTA Train Tracker</Link>
+      </h1>
 
     {/* Line Buttons */}
     <div className="line-buttons">
         {["gold", "red", "green", "blue"].map((line) => (
-          <button
-            key={line}
-            onClick={() => {
-              setCurrLine(line);
-              setSelectedStation(null);
-              setFilters({ arriving: false, scheduled: false, direction: null });
-            }}
-            className={`line-button ${currLine === line ? "active" : ""}`}
-          >
-            {line.charAt(0).toUpperCase() + line.slice(1)}
-          </button>
+          <Link key={line} to={`/lines/${line}`}>
+            <button
+              key={line}
+              onClick={() => {
+                setCurrLine(line);
+                setSelectedStation(null);
+                setFilters({ arriving: false, scheduled: false, direction: null });
+              }}
+              className={`line-button ${currLine === line ? "active" : ""}`}
+            >
+              {line.charAt(0).toUpperCase() + line.slice(1)}
+            </button>
+          </Link>
         ))}
       </div>
 

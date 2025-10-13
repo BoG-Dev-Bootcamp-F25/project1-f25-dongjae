@@ -1,0 +1,33 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.line-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.line-btn {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  border: none;
+  color: white;
+}
+
+/* Example colors per line */
+.line-btn.gold { background-color: gold; color: black; }
+.line-btn.red { background-color: red; }
+.line-btn.green { background-color: green; }
+.line-btn.blue { background-color: blue; }
+
+.about-link button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
