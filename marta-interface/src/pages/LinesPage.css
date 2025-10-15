@@ -1,31 +1,53 @@
-/* LinesPage.css */
-.container {
-  padding: 1rem;
-  max-width: 800px;
-  margin: 0 auto;
+.lines-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  box-sizing: border-box;
+  width: 100%;
 }
 
+
 .line-buttons {
-  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .line-button {
-  margin-right: 0.5rem;
-  font-weight: normal;
+  padding: 0.5rem 0.5rem;
+  border-radius: 8px;
+  border: none;
+  /* cursor: pointer; */
 }
+
+.line-button.gold { background-color: gold; color: black; }
+.line-button.red { background-color: red; }
+.line-button.green { background-color: green; }
+.line-button.blue { background-color: blue; }
 
 .line-button.active {
   font-weight: bold;
+  outline: 2px solid #000;
 }
 
-.home-btn {
-  font-size: inherit;      
-  font-weight: inherit;    
-  color: black;          
-  text-decoration: none;
-  cursor: pointer; 
+.train-data {
+  display: grid;
+  grid-template-columns: 200px 1fr 200px; /* left, center, right */
+  align-items: start;
+  gap: 2rem;
 }
 
-.home-btn:hover {
-  text-decoration: underline;
+.navbar {
+  grid-column: 1;
 }
+
+.train-list {
+  grid-column: 2;
+  justify-self: center;
+}
+

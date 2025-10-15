@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useSearchParams, Link } from "react-router";
 import {TrainList} from "../components/TrainList";
 import { NavBar } from "../components/NavBar";
+import "./LinesPage.css";
 
 export default function LinesPage() {
   // Track current line
@@ -38,23 +39,22 @@ export default function LinesPage() {
 
 
   return (
-    <div className="container">
+    <div className="lines-container">
       <h1>
         <Link to="/" className="home-btn">MARTA Train Tracker</Link>
       </h1>
 
-    {/* Line Buttons */}
-    <div className="line-buttons">
+      {/* Line Buttons */}
+      <div className="line-buttons">
         {["gold", "red", "green", "blue"].map((line) => (
           <Link key={line} to={`/lines/${line}`}>
-            <button
-              key={line}
+            <button 
               onClick={() => {
                 setCurrLine(line);
                 setSelectedStation(null);
                 setFilters({ arriving: false, scheduled: false, direction: null });
               }}
-              className={`line-button ${currLine === line ? "active" : ""}`}
+              className={` line-button ${line}  ${currLine === line ? "active" : ""}`}
             >
               {line.charAt(0).toUpperCase() + line.slice(1)}
             </button>
@@ -62,11 +62,10 @@ export default function LinesPage() {
         ))}
       </div>
 
-
-    {loading ? (
+      {loading ? (
         <p>Loading trains...</p>
       ) : (
-        <>
+        <div className="train-data">
           <NavBar
             stations={stationData}
             selectedStation={selectedStation}
@@ -76,12 +75,14 @@ export default function LinesPage() {
             color={currLine}
             data={trainData}
             selectedStation={selectedStation}
+            setSelectedStation={setSelectedStation}
             filters={filters}
             setFilters={setFilters}
           />
-        </>
+        </div>
       )}
     </div>
+
     
 
   );

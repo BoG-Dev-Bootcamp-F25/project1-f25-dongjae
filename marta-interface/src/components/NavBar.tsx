@@ -31,6 +31,8 @@ export const NavBar = ({
 
   return (
     <div className="navbar">
+      <p className="station-heading">Select a station</p>
+
       {/* All Stations button */}
       <button
         className={`station-btn ${selectedStation === null ? "active" : ""}`}

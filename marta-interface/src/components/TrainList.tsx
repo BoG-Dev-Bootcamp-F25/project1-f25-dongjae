@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSearchParams } from "react-router";
 import { Train } from "./Train";
 import "./TrainList.css";
 
@@ -18,6 +19,7 @@ interface TrainListProps {
       direction: "N" | "S" | "E" | "W" | null;
     }>
   >;
+  setSelectedStation: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const TrainList = ({
@@ -26,7 +28,65 @@ export const TrainList = ({
   selectedStation,
   filters,
   setFilters,
+  setSelectedStation,
 }: TrainListProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Normalize station names
+  const stationNameMap: Record<string, string> = {
+    "LAKEWOOD STATION": "Lakewood/Ft. McPherson",
+  };
+
+  const normalizeStationName = (s: string | null | undefined) => {
+    if (!s) return "";
+    if (stationNameMap[s]) return stationNameMap[s].toUpperCase();
+    return s
+      .toString()
+      .trim()
+      .replace(/\s+station$/i, "")
+      .replace(/\s+/g, " ")
+      .toUpperCase();
+  };
+
+  const isEastWest = ["green", "blue"].includes(color.toLowerCase());
+
+  // Initialize filters & station from URL on mount
+  useEffect(() => {
+    const arriving = searchParams.get("arriving") === "true";
+    const scheduled = searchParams.get("scheduled") === "true";
+    const direction = searchParams.get("direction") as "N" | "S" | "E" | "W" | null;
+    const station = searchParams.get("station");
+
+    setFilters({
+      arriving,
+      scheduled,
+      direction: direction ?? null,
+    });
+    setSelectedStation(station ?? null);
+  }, []);
+
+  // Update URL when filters or station change
+  useEffect(() => {
+    const params = Object.fromEntries([...searchParams]);
+
+    // Filters
+    if (filters.arriving) params.arriving = "true";
+    else delete params.arriving;
+
+    if (filters.scheduled) params.scheduled = "true";
+    else delete params.scheduled;
+
+    if (filters.direction) params.direction = filters.direction;
+    else delete params.direction;
+
+    // Station
+    if (selectedStation) params.station = selectedStation;
+    else delete params.station;
+
+    setSearchParams(params);
+  }, [filters, selectedStation, searchParams, setSearchParams]);
+
+  // Toggle filters
   const toggleFilter = (key: "arriving" | "scheduled") => {
     setFilters((prev) => ({ ...prev, [key]: !prev[key] }));
   };
@@ -37,47 +97,26 @@ export const TrainList = ({
       direction: prev.direction === dir ? null : dir,
     }));
   };
-  const stationNameMap: Record<string, string> = {
-    "LAKEWOOD STATION": "Lakewood/Ft. McPherson",
-  };
 
-  const normalizeStationName = (s: string | null | undefined) => {
-    if (!s) return "";
-
-    // Use the mapping if available
-    if (stationNameMap[s]) return stationNameMap[s].toUpperCase();
-
-    return s
-      .toString()
-      .trim()
-      .replace(/\s+station$/i, "")
-      .replace(/\s+/g, " ")
-      .toUpperCase();
-  };
-
-
-  const isEastWest = ["green", "blue"].includes(color.toLowerCase());
-
+  // Filter trains
   let filteredData = data;
 
-  // filter by station
   const normalizedSelected = normalizeStationName(selectedStation);
-
-if (normalizedSelected) {
-    filteredData = filteredData.filter((t) =>
-        normalizeStationName(t.STATION) === normalizedSelected
+  if (normalizedSelected) {
+    filteredData = filteredData.filter(
+      (t) => normalizeStationName(t.STATION) === normalizedSelected
     );
-    }
-
-  // filter by status
-  if (filters.arriving) {
-    filteredData = filteredData.filter((t) => t.WAITING_TIME === "Arriving");
-  }
-  if (filters.scheduled) {
-    filteredData = filteredData.filter((t) => t.WAITING_TIME !== "Arriving");
   }
 
-  // filter by direction
+  if (filters.arriving || filters.scheduled) {
+    filteredData = filteredData.filter((t) => {
+      const isArriving = t.WAITING_TIME === "Arriving";
+      if (filters.arriving && isArriving) return true;
+      if (filters.scheduled && !isArriving) return true;
+      return false;
+    });
+  }
+
   if (filters.direction) {
     filteredData = filteredData.filter((t) => t.DIRECTION === filters.direction);
   }
