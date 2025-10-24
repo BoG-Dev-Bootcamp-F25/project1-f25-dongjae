@@ -12,7 +12,7 @@ createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/about" element={<About />} />
-        <Route path="/lines/:lineColor" element={<LinesPage />} />
+        <Route path="/lines/:line" element={<LinesPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

@@ -13,16 +13,20 @@
 .line-buttons {
   display: flex;
   gap: 1rem;
-  margin-bottom: 2rem;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-evenly;
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  padding: 2rem;
 }
 
 .line-button {
   padding: 0.5rem 0.5rem;
   border-radius: 8px;
   border: none;
-  /* cursor: pointer; */
+  width: 250px;
+  font-size: large;
+  color: white;
 }
 
 .line-button.gold { background-color: gold; color: black; }
@@ -36,10 +40,17 @@
 }
 
 .train-data {
-  display: grid;
-  grid-template-columns: 200px 1fr 200px; /* left, center, right */
-  align-items: start;
-  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.curr-line {
+  font-weight: bold;
+  font-size: 4rem;
+  border-bottom: 1px solid black;
+  padding: 2rem;
+
 }
 
 .navbar {
@@ -51,3 +62,13 @@
   justify-self: center;
 }
 
+.train-list-column {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.train-station-list {
+  display: flex;
+  flex-direction: row;
+}

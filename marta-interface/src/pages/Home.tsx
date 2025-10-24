@@ -9,20 +9,20 @@ export default function Home() {
     <div className="home-container">
       
       <header className="home-header">
-        <h1>MARTA Home</h1>
+        <h1>MARTA</h1>
         <div className="home-about-link">
           <Link to="/about">
-            <button>About MARTA</button>
+            <button className="about-marta">About MARTA</button>
           </Link>
         </div>
       </header>
 
       <div className="home-main-content">
         <div className="home-line-buttons">
-          <h2 className="home-select-line-heading">Select a Line</h2>
+          <h2 className="home-select-line-heading">View Routes Schedule</h2>
           {lines.map((line) => (
             <Link key={line} to={`/lines/${line}`}>
-              <button className={`home-line-btn ${line}`}>
+              <button className={`home-line-btn `}>
                 {line.toUpperCase()} Line
               </button>
             </Link>

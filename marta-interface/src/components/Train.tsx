@@ -4,18 +4,31 @@ import "./Train.css";
 
 interface TrainProps {
   train: any;
+  color: any;
 }
 
-export const Train = ({ train }: TrainProps) => {
+export const Train = ({ train, color }: TrainProps) => {
   const isOnTime = train.DELAY === "T0S";
 
   return (
-    <div className={`train-card`}>
-      <p><strong>Station:</strong> {train.STATION}</p>
-      <p><strong>Destination:</strong> {train.DESTINATION}</p>
-      <p><strong>Direction:</strong> {train.DIRECTION}</p>
-      <p><strong>Waiting Time:</strong> {train.WAITING_TIME}</p>
-      <p className={`${isOnTime ? "on-time" : "delayed"}`}><strong>Status:</strong> {isOnTime ? "On Time" : "Delayed"}</p>
+    <div className="train-card">
+
+      <div className="train-logo">M</div>
+
+
+      <div className="train-info">
+
+        <p className="train-station">{train.STATION + "-->" + train.DESTINATION}</p>
+
+        <div className="train-bottom-row">
+          <p className={`color-box ${color}`}>{color}</p>
+          <p className={`${isOnTime ? "on-time" : "delayed"} train-status`}>
+            {isOnTime ? "On Time" : "Delayed"}
+          </p>
+          <p className="train-time">{train.WAITING_TIME}</p>
+        </div>
+      </div>
     </div>
   );
 };
+

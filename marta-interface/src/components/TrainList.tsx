@@ -32,7 +32,6 @@ export const TrainList = ({
 }: TrainListProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Normalize station names
   const stationNameMap: Record<string, string> = {
     "LAKEWOOD STATION": "Lakewood/Ft. McPherson",
   };
@@ -47,8 +46,6 @@ export const TrainList = ({
       .replace(/\s+/g, " ")
       .toUpperCase();
   };
-
-  const isEastWest = ["green", "blue"].includes(color.toLowerCase());
 
   // Initialize filters & station from URL on mount
   useEffect(() => {
@@ -69,7 +66,6 @@ export const TrainList = ({
   useEffect(() => {
     const params = Object.fromEntries([...searchParams]);
 
-    // Filters
     if (filters.arriving) params.arriving = "true";
     else delete params.arriving;
 
@@ -79,26 +75,13 @@ export const TrainList = ({
     if (filters.direction) params.direction = filters.direction;
     else delete params.direction;
 
-    // Station
     if (selectedStation) params.station = selectedStation;
     else delete params.station;
 
     setSearchParams(params);
   }, [filters, selectedStation, searchParams, setSearchParams]);
 
-  // Toggle filters
-  const toggleFilter = (key: "arriving" | "scheduled") => {
-    setFilters((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
-  const toggleDirection = (dir: "N" | "S" | "E" | "W") => {
-    setFilters((prev) => ({
-      ...prev,
-      direction: prev.direction === dir ? null : dir,
-    }));
-  };
-
-  // Filter trains
+  // Apply filters
   let filteredData = data;
 
   const normalizedSelected = normalizeStationName(selectedStation);
@@ -123,39 +106,10 @@ export const TrainList = ({
 
   return (
     <div>
-      {/* Filter buttons */}
-      <div className="filter-buttons">
-        <button
-          className={filters.arriving ? "active" : ""}
-          onClick={() => toggleFilter("arriving")}
-        >
-          Arriving
-        </button>
-        <button
-          className={filters.scheduled ? "active" : ""}
-          onClick={() => toggleFilter("scheduled")}
-        >
-          Scheduled
-        </button>
-        <button
-          className={filters.direction === (isEastWest ? "E" : "N") ? "active" : ""}
-          onClick={() => toggleDirection(isEastWest ? "E" : "N")}
-        >
-          {isEastWest ? "Eastbound" : "Northbound"}
-        </button>
-        <button
-          className={filters.direction === (isEastWest ? "W" : "S") ? "active" : ""}
-          onClick={() => toggleDirection(isEastWest ? "W" : "S")}
-        >
-          {isEastWest ? "Westbound" : "Southbound"}
-        </button>
-      </div>
-
-      {/* Train list */}
       {filteredData.length === 0 ? (
         <p>No Current Trains Match Filters</p>
       ) : (
-        filteredData.map((train, index) => <Train key={index} train={train} />)
+        filteredData.map((train, index) => <Train key={index} train={train} color={color}/>)
       )}
     </div>
   );
